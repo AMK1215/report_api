@@ -29,7 +29,7 @@ class SyncUsersFromAPI extends Command
     {
         try {
             // Fetch users from the external API
-            $response = Http::get('https://agdashboard.pro/transferdata/getallusers'); // Replace with the actual API URL
+            $response = Http::get('https://agdashboard.pro/api/transferdata/getallusers'); // Replace with the actual API URL
 
             if ($response->failed()) {
                 $this->error('Failed to fetch users from API.');
