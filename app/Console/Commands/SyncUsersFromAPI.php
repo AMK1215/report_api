@@ -108,14 +108,14 @@ class SyncUsersFromAPI extends Command
                 }
 
                 // Insert or update the user in the user_trees table
-                UserTree::updateOrCreate(
-                    ['user_id' => $user->id], // Match condition
-                    [
-                        'parent_id' => $apiUser['agent_id'] ?? $user->id, // Set parent_id (fallback to the user's own ID)
-                        'type' => $apiUser['type'] ?? 0,                 // Default type if not provided
-                        'parent_type' => $apiUser['parent_type'] ?? 0,   // Default parent_type if not provided
-                    ]
-                );
+                // UserTree::updateOrCreate(
+                //     ['user_id' => $user->id], // Match condition
+                //     [
+                //         'parent_id' => $apiUser['agent_id'] ?? $user->id, // Set parent_id (fallback to the user's own ID)
+                //         'type' => $apiUser['type'] ?? 0,                 // Default type if not provided
+                //         'parent_type' => $apiUser['parent_type'] ?? 0,   // Default parent_type if not provided
+                //     ]
+                // );
             }
 
             $this->info('Users synced successfully.');

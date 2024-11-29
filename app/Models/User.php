@@ -80,7 +80,7 @@ class User extends Authenticatable implements Wallet
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'type' => UserType::class,
+        //'type' => UserType::class,
     ];
 
     public function getIsAdminAttribute()
