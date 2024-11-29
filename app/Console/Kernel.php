@@ -10,6 +10,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\GetDailySummary::class,
         Commands\DownloadGameImages::class,
+        Commands\SyncUsersFromAPI::class,
     ];
 
 
@@ -22,6 +23,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('summary:fetch')->dailyAt('00:01');
+        $schedule->command('sync:users')->hourly();
 
     }
 
