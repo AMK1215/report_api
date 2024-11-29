@@ -40,65 +40,64 @@ class SyncUser extends Command
         $response = Http::get('https://agdashboard.pro/api/transferdata/getallusers');
 
         if ($response->failed()) {
-            $this->error('Failed to fetch users from API.');
+            $this->error('Failed to fetch users from API. Status: ' . $response->status());
             return;
         }
 
         $apiUsers = $response->json('data');
 
+        if (empty($apiUsers)) {
+            $this->error('No users found in the API response.');
+            return;
+        }
+
         // Chunk the API data into smaller batches
-        $chunkSize = 100;
+        $chunkSize = 100; // Adjust based on your memory and system capacity
         $chunks = array_chunk($apiUsers, $chunkSize);
 
         foreach ($chunks as $chunk) {
             foreach ($chunk as $apiUser) {
-                // Check if user exists in the local database
-                $user = User::where('user_name', $apiUser['user_name'])->first();
+                try {
+                    // Check if user exists in the local database
+                    $user = User::where('user_name', $apiUser['user_name'])->first();
 
-                if (!$user) {
-                    // Create the user if it doesn't exist
-                    User::updateOrCreate(
-                        ['user_name' => $apiUser['user_name']],
-                        [
-                            'id' => $apiUser['id'],
-                            'name' => $apiUser['name'],
-                            'phone' => $apiUser['phone'],
-                            'email' => $apiUser['email'],
-                            'email_verified_at' => $apiUser['email_verified_at'],
-                            'profile' => $apiUser['profile'],
-                            'max_score' => $apiUser['max_score'],
-                            'status' => $apiUser['status'],
-                            'is_changed_password' => $apiUser['is_changed_password'],
-                            'agent_id' => $apiUser['agent_id'],
-                            'payment_type_id' => $apiUser['payment_type_id'],
-                            'agent_logo' => $apiUser['agent_logo'],
-                            'account_name' => $apiUser['account_name'],
-                            'account_number' => $apiUser['account_number'],
-                            'line_id' => $apiUser['line_id'],
-                            'commission' => $apiUser['commission'],
-                            'referral_code' => $apiUser['referral_code'],
-                            'password' => Hash::make('delightmyanmar'),
-                            'created_at' => $apiUser['created_at'],
-                            'updated_at' => $apiUser['updated_at'],
-                        ]
-                    );
+                    if (!$user) {
+                        // Create the user if it doesn't exist
+                        User::updateOrCreate(
+                            ['user_name' => $apiUser['user_name']],
+                            [
+                                'id' => $apiUser['id'],
+                                'name' => $apiUser['name'],
+                                'phone' => $apiUser['phone'],
+                                'email' => $apiUser['email'],
+                                'email_verified_at' => $apiUser['email_verified_at'],
+                                'profile' => $apiUser['profile'],
+                                'max_score' => $apiUser['max_score'],
+                                'status' => $apiUser['status'],
+                                'is_changed_password' => $apiUser['is_changed_password'],
+                                'agent_id' => $apiUser['agent_id'], // Assuming agent_id exists or null
+                                'payment_type_id' => $apiUser['payment_type_id'],
+                                'agent_logo' => $apiUser['agent_logo'],
+                                'account_name' => $apiUser['account_name'],
+                                'account_number' => $apiUser['account_number'],
+                                'line_id' => $apiUser['line_id'],
+                                'commission' => $apiUser['commission'],
+                                'referral_code' => $apiUser['referral_code'],
+                                'password' => Hash::make('delightmyanmar'),
+                                'created_at' => $apiUser['created_at'],
+                                'updated_at' => $apiUser['updated_at'],
+                            ]
+                        );
+                    }
+                } catch (\Exception $e) {
+                    $this->error("Error syncing user {$apiUser['user_name']}: " . $e->getMessage());
                 }
-                // Insert or update the user in the user_trees table
-        UserTree::updateOrCreate(
-            ['user_id' => $user->id], // Match condition
-            [
-                'parent_id' => $apiUser['agent_id'] ?? $user->id, // Set parent_id (fallback to the user's own ID)
-                'type' => $apiUser['type'] ?? 0,                 // Default type if not provided
-                'parent_type' => $apiUser['parent_type'] ?? 0,   // Default parent_type if not provided
-            ]
-        );
             }
         }
 
         $this->info('Users synced successfully.');
-
     } catch (\Exception $e) {
-        $this->error('An error occurred: ' . $e->getMessage());
+        $this->error('An error occurred during sync: ' . $e->getMessage());
     } finally {
         // Re-enable foreign key checks
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
