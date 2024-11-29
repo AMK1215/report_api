@@ -155,8 +155,9 @@ foreach ($chunks as $chunk) {
             User::updateOrCreate(
                 ['id' => $apiUser['agent_id']], // Ensure agents exist
                 [
-                    'user_name' => "Agent_{$apiUser['agent_id']}", // Placeholder if no name exists
                     'name' => "Agent Placeholder", // Placeholder name
+                    'user_name' => "Agent_{$apiUser['agent_id']}", // Placeholder if no name exists
+                    'phone' => "09412456789",
                     'status' => 1,
                     'password' => Hash::make('delightmyanmar'),
                 ]
