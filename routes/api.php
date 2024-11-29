@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\DepositRequestController;
 use App\Http\Controllers\Api\V1\GetAdminSiteLogoNameController;
 use App\Http\Controllers\Api\V1\GetBalanceController;
+use App\Http\Controllers\Api\V1\Monitor\DataVisualizationController;
 use App\Http\Controllers\Api\V1\PromotionController;
 use App\Http\Controllers\Api\V1\Slot\GameController;
 use App\Http\Controllers\Api\V1\Slot\GetDaySummaryController;
@@ -25,7 +26,6 @@ use App\Http\Controllers\Api\V1\Webhook\RewardController;
 use App\Http\Controllers\Api\V1\WithDrawRequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\Monitor\DataVisualizationController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);

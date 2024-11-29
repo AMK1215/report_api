@@ -30,8 +30,8 @@ class ReportController extends Controller
             ->join('users as agents', 'players.agent_id', '=', 'agents.id')
             ->groupBy('players.name', 'agents.name', 'players.id')
             ->paginate(10)
-            ->withQueryString();;
-        
+            ->withQueryString();
+
         return view('admin.reports.index', compact('report'));
     }
 

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Bet extends Model
 {
     use HasFactory;
+
     protected $table = 'bets'; // Ensure the table name matches your database
 
     protected $fillable = [

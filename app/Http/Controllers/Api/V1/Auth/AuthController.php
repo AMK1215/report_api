@@ -37,8 +37,6 @@ class AuthController extends Controller
     //     }
     //     $user = Auth::user();
 
-
-
     //     if ($user->status == 0) {
     //         return $this->error('', 'Your account is not activated!', 401);
     //     }
@@ -86,9 +84,8 @@ class AuthController extends Controller
         $user->load('roles');
 
         if ($user->roles->isEmpty() || $user->roles[0]->id != self::PLAYER_ROLE) {
-         return $this->error('', 'You do not have permissions', 200);
+            return $this->error('', 'You do not have permissions', 200);
         }
-
 
         UserLog::create([
             'ip_address' => $request->ip(),
@@ -98,7 +95,6 @@ class AuthController extends Controller
 
         return $this->success(new UserResource($user), 'User login successfully.');
     }
-
 
     public function register(RegisterRequest $request)
     {

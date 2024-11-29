@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('parent_id')->constrained('users');
-            $table->tinyInteger('type');
-            $table->tinyInteger('parent_type');
+            $table->tinyInteger('type')->default(0);
+            $table->tinyInteger('parent_type')->default(0);
             $table->timestamps();
         });
     }

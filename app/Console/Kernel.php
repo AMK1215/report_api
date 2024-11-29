@@ -13,9 +13,6 @@ class Kernel extends ConsoleKernel
         Commands\SyncUsersFromAPI::class,
     ];
 
-
-
-
     /**
      * Define the application's command schedule.
      */

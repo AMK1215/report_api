@@ -80,6 +80,7 @@ class GameController extends Controller
             ->where('status', 1)
             ->where('game_name', 'like', '%'.$request->name.'%')
             ->paginate(24);
+
         return $this->success($gameLists, 'GameList Successfully');
     }
 }
